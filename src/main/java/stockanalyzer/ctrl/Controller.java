@@ -12,11 +12,10 @@ public class Controller {
 		//2) Daten Analyse
 
 	}
-	
+
 
 	public Object getData(String searchString) {
 
-		
 		return null;
 	}
 
