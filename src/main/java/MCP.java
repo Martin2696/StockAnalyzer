@@ -1,3 +1,6 @@
+//https://github.com/Martin2696/StockAnalyzer
+
+
 import stockanalyzer.ui.UserInterface;
 import yahooApi.YahooFinanceException;
 

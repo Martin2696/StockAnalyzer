@@ -18,7 +18,7 @@ public class Controller {
 			stock = YahooFinance.get(ticker);
 
 			Calendar from = Calendar.getInstance();
-			from.add(Calendar.WEEK_OF_MONTH, -4); // last 8 weeks
+			from.add(Calendar.WEEK_OF_MONTH, -20); // last 8 weeks
 
 			var result = stock.getHistory(from, Interval.DAILY).stream()
 					.mapToDouble(q -> q.getClose().doubleValue())

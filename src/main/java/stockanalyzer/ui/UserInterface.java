@@ -40,9 +40,9 @@ public class UserInterface
 	public void start() throws YahooFinanceException {
 		Menu<Runnable> menu = new Menu<>("User Interface");
 		menu.setTitel("Wählen Sie aus:");
-		menu.insert("a", "Choice 1", this::getDataFromCtrl1);
-		menu.insert("b", "Choice 2", this::getDataFromCtrl2);
-		menu.insert("c", "Choice 3", this::getDataFromCtrl3);
+		menu.insert("a", "Apple", this::getDataFromCtrl1);
+		menu.insert("b", "Gamestop", this::getDataFromCtrl2);
+		menu.insert("c", "Facebook", this::getDataFromCtrl3);
 		menu.insert("q", "Quit", null);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {
