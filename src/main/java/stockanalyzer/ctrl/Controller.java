@@ -2,8 +2,11 @@ package stockanalyzer.ctrl;
 
 import yahooApi.YahooFinanceException;
 import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
+import yahoofinance.histquotes.Interval;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class Controller {
 
@@ -12,14 +15,28 @@ public class Controller {
 	public void process(String ticker) throws YahooFinanceException {
 
 		try {
-			stock = yahoofinance.YahooFinance.get(ticker);
+			stock = YahooFinance.get(ticker);
 
-			var result = stock.getHistory().stream()
+			Calendar from = Calendar.getInstance();
+			from.add(Calendar.WEEK_OF_MONTH, -4); // last 8 weeks
+
+			var result = stock.getHistory(from, Interval.DAILY).stream()
 					.mapToDouble(q -> q.getClose().doubleValue())
 					.max()
 					.orElse(0.0);
 
-			stock.getHistory().forEach(q -> System.out.println(q));
+			var result2 = stock.getHistory().stream()
+					.mapToDouble(q -> q.getClose().doubleValue())
+					.average()
+					.orElse(0.0);
+
+
+			var result3 = stock.getHistory().stream()
+					.mapToDouble(q -> q.getClose().doubleValue())
+					.count();
+
+
+			//stock.getHistory().forEach(q -> System.out.println(q));
 
 			System.out.println();
 			System.out.println(ticker);
@@ -28,18 +45,9 @@ public class Controller {
 			System.out.println("* * * * Max Price * * * * *");
 			System.out.println(result);
 
-			var result2 = stock.getHistory().stream()
-					.mapToDouble(q -> q.getClose().doubleValue())
-					.average()
-					.orElse(0.0);
-
 			System.out.println();
 			System.out.println("* * * * Average Price * * * * *");
 			System.out.println(result2);
-
-			var result3 = stock.getHistory().stream()
-					.mapToDouble(q -> q.getClose().doubleValue())
-					.count();
 
 			System.out.println();
 			System.out.println("* * * * Amount * * * * *");
