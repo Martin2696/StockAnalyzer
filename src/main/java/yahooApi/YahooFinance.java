@@ -2,7 +2,6 @@ package yahooApi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import yahooApi.beans.Asset;
 import yahooApi.beans.YahooResponse;
 
 import javax.json.*;
@@ -10,7 +9,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,16 +53,6 @@ public class YahooFinance {
         return jo;
     }
 
-    public void fetchAssetName(Asset asset) throws YahooFinanceException {
-        YahooFinance yahoo = new YahooFinance();
-        List<String> symbols = new ArrayList<>();
-        symbols.add(asset.getSymbol());
-        String jsonResponse = null;
-        jsonResponse = yahoo.requestData(symbols);
-        JsonObject jo = yahoo.convert(jsonResponse);
-        asset.setName(extractName(jo));
-    }
-
     private String extractName(JsonObject jo) {
         String returnName = "";
         Map<String, JsonObject> stockData = ((Map) jo.getJsonObject("quoteResponse"));
@@ -75,21 +63,16 @@ public class YahooFinance {
         return returnName;
     }
 
-    public YahooResponse getCurrentData(List<String> tickers) {
-        String jsonResponse = null;
+    public YahooResponse getCurrentData(List<String> tickers) throws YahooFinanceException {
 
-        try {
-            jsonResponse = requestData(tickers);
-        } catch (YahooFinanceException e) {
-            System.out.println(e.getMessage());
-        }
+        String jsonResponse = requestData(tickers);
 
         ObjectMapper objectMapper = new ObjectMapper();
         YahooResponse result = null;
         try {
             result  = objectMapper.readValue(jsonResponse, YahooResponse.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new YahooFinanceException("Can't reach the data");
         }
         return result;
     }
