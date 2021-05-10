@@ -72,6 +72,11 @@ public class UserInterface
 			tickers.add("AAPL");
 			tickers.add("GME");
 			tickers.add("FB");
+			tickers.add("TSLA");
+			tickers.add("PLUG");
+			tickers.add("AMZN");
+			tickers.add("NVDA");
+			tickers.add("TME");
 
 			ParallelDownloader parallelDownloader = new ParallelDownloader();
 
