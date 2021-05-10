@@ -4,8 +4,14 @@ package stockanalyzer.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import stockanalyzer.ctrl.Controller;
+import stockanalyzer.downloader.Downloader;
+import stockanalyzer.downloader.ParallelDownloader;
+import stockanalyzer.downloader.SequentialDownloader;
 import yahooApi.YahooFinanceException;
 
 public class UserInterface 
@@ -37,13 +43,54 @@ public class UserInterface
 		}
 	}
 
+	public void getDownloadedTickersS() {
+		try {
+			Downloader downloader;
+			List<String> tickers = new ArrayList<>();
+			tickers.add("AAPL");
+			tickers.add("GME");
+			tickers.add("FB");
+			tickers.add("TSLA");
+			tickers.add("PLUG");
+			tickers.add("AMZN");
+			tickers.add("NVDA");
+			tickers.add("TME");
+
+			SequentialDownloader sequentialDownloader = new SequentialDownloader();
+
+			ctrl.downloadTickers(tickers, sequentialDownloader);
+
+		} catch (YahooFinanceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void getDownloadedTickersP() {
+		try {
+			Downloader downloader;
+			List<String> tickers = new ArrayList<>();
+			tickers.add("AAPL");
+			tickers.add("GME");
+			tickers.add("FB");
+
+			ParallelDownloader parallelDownloader = new ParallelDownloader();
+
+			ctrl.downloadTickers(tickers, parallelDownloader);
+
+		} catch (YahooFinanceException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void start() throws YahooFinanceException {
 		Menu<Runnable> menu = new Menu<>("User Interface");
-		menu.setTitel("Wählen Sie aus:");
+		menu.setTitel("Choose wisely:");
 		menu.insert("a", "Apple", this::getDataFromCtrl1);
 		menu.insert("b", "Gamestop", this::getDataFromCtrl2);
 		menu.insert("c", "Facebook", this::getDataFromCtrl3);
 		menu.insert("q", "Quit", null);
+		menu.insert("m", "Sequential Download", this::getDownloadedTickersS);
+		menu.insert("n", "Parallel Download", this::getDownloadedTickersP);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {
 			 choice.run();
