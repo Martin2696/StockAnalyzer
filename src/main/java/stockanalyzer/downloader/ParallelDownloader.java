@@ -8,32 +8,33 @@ public class ParallelDownloader extends Downloader {
 
     @Override
     public int process(List<String> tickers) {
+
         long timer = System.currentTimeMillis();
 
         ExecutorService executor = Executors.newFixedThreadPool(4);
 
-        List<Future<String>> myList = new ArrayList<>();
+        List<Future<String>> futureList = new ArrayList<>();
 
         for (String ticker : tickers) {
 
             Callable<String> request = () -> saveJson2File(ticker);
 
-            Future<String> fileName = executor.submit(request);
+            Future<String> someFile = executor.submit(request);
 
-            myList.add(fileName);
+            futureList.add(someFile);
 
         }
 
-        for (Future<String> future : myList ){
+        for (Future<String> future : futureList ){
             try {
-                String fileName = future.get();
+                String someFile = future.get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
 
         System.out.println("Parallel Time: " + (System.currentTimeMillis() - timer));
-        return myList.size();
+        return futureList.size();
 
     }
 }
